@@ -94,5 +94,5 @@
 #define COAP_PROXY_OPTION_PROCESSING   0
 
 /* Enable client-side support for COAP observe */
-#define COAP_OBSERVE_CLIENT 1
+#define COAP_OBSERVE_CLIENT 0
 #endif /* __PROJECT_ERBIUM_CONF_H__ */
