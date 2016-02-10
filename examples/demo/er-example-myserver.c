@@ -43,11 +43,11 @@ _ * Copyright (c) 2013, Institute for Pervasive Computing, ETH Zurich
 #include "contiki-net.h"
 #include "rest-engine.h"
 
-#if PLATFORM_HAS_BUTTON
+/*#if PLATFORM_HAS_BUTTON
 #include "dev/button-sensor.h"
-#endif
+#endif*/
 
-#define DEBUG 0
+/*#define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -57,61 +57,34 @@ _ * Copyright (c) 2013, Institute for Pervasive Computing, ETH Zurich
 #define PRINTF(...)
 #define PRINT6ADDR(addr)
 #define PRINTLLADDR(addr)
-#endif
+#endif*/
 
 /*
  * Resources to be activated need to be imported through the extern keyword.
  * The build system automatically compiles the resources in the corresponding sub-directory.
  */
 extern resource_t
-  res_hello,
-  res_mirror,
-  res_chunks,
-  res_separate,
-  res_push,
-  res_event,
-  res_sub,
-  res_b1_sep_b2;
-#if PLATFORM_HAS_LEDS
-extern resource_t res_leds, res_toggle;
-#endif
-#if PLATFORM_HAS_LIGHT
-#include "dev/light-sensor.h"
-extern resource_t res_light;
-#endif
-#if PLATFORM_HAS_BATTERY
-#include "dev/battery-sensor.h"
-extern resource_t res_battery;
-#endif
+
+  res_example2;
+
 #if PLATFORM_HAS_TEMPERATURE
 #include "dev/temperature-sensor.h"
-extern resource_t res_temperature;
+extern resource_t res_temp1;
 #endif
-/*
-extern resource_t res_battery;
-#endif
-#if PLATFORM_HAS_RADIO
-#include "dev/radio-sensor.h"
-extern resource_t res_radio;
-#endif
-#if PLATFORM_HAS_SHT11
-#include "dev/sht11/sht11-sensor.h"
-extern resource_t res_sht11;
-#endif
-*/
 
-PROCESS(er_example_server, "Erbium Example Server");
-AUTOSTART_PROCESSES(&er_example_server);
 
-PROCESS_THREAD(er_example_server, ev, data)
+PROCESS(er_example_myserver, "Erbium Example Server");
+AUTOSTART_PROCESSES(&er_example_myserver);
+
+PROCESS_THREAD(er_example_myserver, ev, data)
 {
   PROCESS_BEGIN();
 
   PROCESS_PAUSE();
 
-  PRINTF("Starting Erbium Example Server\n");
+  printf("Starting Erbium Example Server\n");
 
-#ifdef RF_CHANNEL
+/*#ifdef RF_CHANNEL
   PRINTF("RF channel: %u\n", RF_CHANNEL);
 #endif
 #ifdef IEEE802154_PANID
@@ -121,7 +94,7 @@ PROCESS_THREAD(er_example_server, ev, data)
   PRINTF("uIP buffer: %u\n", UIP_BUFSIZE);
   PRINTF("LL header: %u\n", UIP_LLH_LEN);
   PRINTF("IP+UDP header: %u\n", UIP_IPUDPH_LEN);
-  PRINTF("REST max chunk: %u\n", REST_MAX_CHUNK_SIZE);
+  PRINTF("REST max chunk: %u\n", REST_MAX_CHUNK_SIZE);*/
 
   /* Initialize the REST engine. */
   rest_init_engine();
@@ -131,56 +104,27 @@ PROCESS_THREAD(er_example_server, ev, data)
    * WARNING: Activating twice only means alternate path, not two instances!
    * All static variables are the same for each URI path.
    */
-  rest_activate_resource(&res_hello, "test/hello");
-/*  rest_activate_resource(&res_mirror, "debug/mirror"); */
-/*  rest_activate_resource(&res_chunks, "test/chunks"); */
-/*  rest_activate_resource(&res_separate, "test/separate"); */
-  rest_activate_resource(&res_push, "test/push");
-/*  rest_activate_resource(&res_event, "sensors/button"); */
-/*  rest_activate_resource(&res_sub, "test/sub"); */
-/*  rest_activate_resource(&res_b1_sep_b2, "test/b1sepb2"); */
-#if PLATFORM_HAS_LEDS
-/*  rest_activate_resource(&res_leds, "actuators/leds"); */
-  rest_activate_resource(&res_toggle, "actuators/toggle");
-#endif
-#if PLATFORM_HAS_LIGHT
-  rest_activate_resource(&res_light, "sensors/light"); 
-  SENSORS_ACTIVATE(light_sensor);  
-#endif
-#if PLATFORM_HAS_BATTERY
-  rest_activate_resource(&res_battery, "sensors/battery");  
-  SENSORS_ACTIVATE(battery_sensor);  
-#endif
+  rest_activate_resource(&res_example2, "test/example2");
 #if PLATFORM_HAS_TEMPERATURE
-  rest_activate_resource(&res_temperature, "sensors/temperature");  
-  SENSORS_ACTIVATE(temperature_sensor);  
+  rest_activate_resource(&res_temp1, "sensors/temp1");
+  SENSORS_ACTIVATE(temperature_sensor);
 #endif
-/*
-#if PLATFORM_HAS_RADIO
-  rest_activate_resource(&res_radio, "sensors/radio");  
-  SENSORS_ACTIVATE(radio_sensor);  
-#endif
-#if PLATFORM_HAS_SHT11
-  rest_activate_resource(&res_sht11, "sensors/sht11");  
-  SENSORS_ACTIVATE(sht11_sensor);  
-#endif
-*/
+
 
   /* Define application-specific events here. */
-  while(1) {
-    PROCESS_WAIT_EVENT();
+/*    PROCESS_WAIT_EVENT();
 #if PLATFORM_HAS_BUTTON
     if(ev == sensors_event && data == &button_sensor) {
-      PRINTF("*******BUTTON*******\n");
+      PRINTF("*******BUTTON*******\n");*/
 
       /* Call the event_handler for this application-specific event. */
-      res_event.trigger();
+     /* res_event.trigger();*/
 
       /* Also call the separate response example handler. */
-      res_separate.resume();
-    }
-#endif /* PLATFORM_HAS_BUTTON */
-  }                             /* while (1) */
+     /* res_separate.resume();*/
+    /*}*/
+/*#endif*/ /* PLATFORM_HAS_BUTTON */
+ /* } */                        /* while (1) */
 
   PROCESS_END();
 }
